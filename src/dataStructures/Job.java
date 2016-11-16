@@ -1,7 +1,5 @@
 package dataStructures;
 
-import java.util.Comparator;
-
 public class Job  implements Comparable<Job>{
 
 	private int index;
@@ -49,6 +47,6 @@ public class Job  implements Comparable<Job>{
 	
 	@Override
 	public String toString() {
-		return "Job: " + this.getProcessingTime() + ", " + this.getDueTime();
+		return "Job: " + this.index + ", " + this.getProcessingTime() + ", " + this.getDueTime();
 	}
 }

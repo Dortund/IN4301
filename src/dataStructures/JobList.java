@@ -38,16 +38,16 @@ public class JobList {
 		return max;
 	}
 	
-	public int getLongestProcessingTimeIndex() {
+	public Job getLongestProcessingJob() {
 		float max = 0;
-		int index = -1;
+		Job j = null;
 		for (Job job : this.jobs) {
 			if (max < job.getProcessingTime()) {
 				max = job.getProcessingTime();
-				index = job.getIndex();
+				j = job;
 			}
 		}
-		return index;
+		return j;
 	}
 	
 	public int getMaximumCompletionTime() {
@@ -71,7 +71,7 @@ public class JobList {
 	}
 	
 	public JobList getSubset(int i, int j, float pTime) {
-		List<Job> jobs = new ArrayList<Job>();
+		List<Job> jobs = new ArrayList<Job>(Math.max(0, j-i+1));
 		for (Job job : this.jobs) {
 			if (job.getIndex() >= i && job.getIndex() <= j && job.getProcessingTime() < pTime) {
 				jobs.add(job);
@@ -83,7 +83,7 @@ public class JobList {
 	public JobList getSubsetDelta(float dTime) {
 		List<Job> jobs = new ArrayList<Job>();
 		for (Job job : this.jobs) {
-			if (job.getDueTime() < dTime) {
+			if (job.getDueTime() <= dTime) {
 				jobs.add(job);
 			}
 		}
@@ -108,6 +108,28 @@ public class JobList {
 		return sum;
 	}
 	
+	/*public int getTardiness(List<Integer> indices) {
+		int res = 0;
+		int runningTime = 0;
+		for (Integer i : indices) {
+			Job j = this.getJob(i);
+			runningTime += j.getProcessingTime();
+			res += j.getWeight() * Math.max(0, runningTime - j.getDueTime());
+		}
+		return res;
+	}*/
+	
+	public boolean sanityCheck() {
+		float due = 0;
+		for (Job job : this.jobs) {
+			if (job.getDueTime()< due)
+				return false;
+			else
+				due = job.getDueTime();
+		}
+		return true;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) { 
@@ -117,6 +139,10 @@ public class JobList {
 			return false;
 		}
 		JobList input = (JobList) obj;
+		/*if (input.size() == 2 && input.getJob(1).getIndex() == 8) {
+			int x = 9;
+			int y = x;
+		}*/
 		if (this.time != input.time) {
 			return false;
 		}
@@ -129,5 +155,20 @@ public class JobList {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.jobs.size();
+	}
+	
+	@Override
+	public String toString() {
+		String res = "";
+		for (Job job : this.jobs) {
+			res += job.getIndex() + ", ";
+		}
+		res = res.substring(0, res.length()-2);
+		return "Time: " + this.time + "; Jobs: " + res;
 	}
 }

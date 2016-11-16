@@ -2,7 +2,7 @@ package sampleCode;
 
 
 public class Schedule implements Comparable<Schedule> {
-	// A linked-list is a reletively efficient representation of a schedule
+	// A linked-list is a relatively efficient representation of a schedule
 	// Feel free to modify it if you feel there exists a better one
 	// The main advantage is that in a search-tree there is a lot of overlap
 	// between schedules, this implementation stores this overlap only once
@@ -11,7 +11,7 @@ public class Schedule implements Comparable<Schedule> {
 	private int jobLength;
 	
 	// tardiness can be calculated instead of memorized
-	// however, we need to calculate it a lot, so we momorize it
+	// however, we need to calculate it a lot, so we memorize it
 	// if memory is an issue, however, try calculating it
 	private int tardiness;
 	

@@ -1,19 +1,18 @@
 package sampleCode;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import algorithms.BruteForce;
 import algorithms.ExactAlgorithm;
 import dataStructures.JobList;
 import testing.Test;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class ComputeTardiness {	
 	public static ProblemInstance readInstance(String filename){
@@ -69,7 +68,7 @@ public class ComputeTardiness {
 		
 	}*/
 	
-	public static void main (String args[]) {
+	public static void main (String args[]) throws InterruptedException {
 		File files = new File("D:/Gebruikers/nomen/Documents/IN4301/IN4301/testSets");
 		
 		List<String> list = Arrays.asList(files.list());
@@ -77,12 +76,17 @@ public class ComputeTardiness {
 		
 		for (String file : list) {
 			String[] lines = file.split("#");
-			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 4) {
-				try {
+			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 5) {
+				//try {
 					System.out.println("Starting on: " + file);
 					String str = files.getAbsolutePath() + "/" + file;
 					
 					ProblemInstance instance = readInstance(str);
+					
+					for (int i = 0; i< instance.getNumJobs(); i++) {
+						System.out.print(instance.getJobs()[i][0] + ",");
+					}
+					System.out.println();
 				
 					System.out.println("Computing Greedy");
 					Greedy greedy = new Greedy(instance);
@@ -101,16 +105,23 @@ public class ComputeTardiness {
 					ExactAlgorithm eA = new ExactAlgorithm(jL);
 					int exact = eA.solve();
 					
-					if (greedyVal == bestVal && greedyVal == exact) {
+					System.out.println("Computing Brute Force");
+					JobList jL2 = Test.getJobList(str);
+					BruteForce bf = new BruteForce(jL2);
+					int bfa = bf.solve();
+					
+					if (/*greedyVal == bestVal && greedyVal == exact*/ exact == bfa) {
 						System.out.println("Correct: " + file);
 					}
 					else {
 						System.err.println("Error: " + file);
+						System.err.println("Exact: " + exact + ", BF: " + bfa + ", Greedy: " + greedyVal + ", Best: " + bestVal);
 					}
-				}
+					Thread.sleep(10);
+				/*}
 				catch (Exception e) {
-					System.out.println(e.toString());
-				}
+					e.printStackTrace();
+				}*/
 			}
 		}
 		
