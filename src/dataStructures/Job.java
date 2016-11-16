@@ -1,0 +1,54 @@
+package dataStructures;
+
+import java.util.Comparator;
+
+public class Job  implements Comparable<Job>{
+
+	private int index;
+	private float processingTime;
+	private float dueTime;
+	private int weight;
+	
+	public Job(int index, float processingTime, float dueTime, int weight) {
+		this.index = index;
+		this.processingTime = processingTime;
+		this.dueTime = dueTime;
+		this.weight = weight;
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
+	public float getProcessingTime() {
+		return this.processingTime;
+	}
+	
+	public void offsetProcessintTime(float value) {
+		this.processingTime += value;
+	}
+
+	public float getDueTime() {
+		return this.dueTime;
+	}
+	
+	public int getWeight() {
+		return this.weight;
+	}
+
+	@Override
+	public int compareTo(Job other) {
+		if (this.getDueTime() < other.getDueTime()) {
+			return -1;
+		}
+		if (this.getDueTime() > other.getDueTime()) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	@Override
+	public String toString() {
+		return "Job: " + this.getProcessingTime() + ", " + this.getDueTime();
+	}
+}
