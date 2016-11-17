@@ -1,6 +1,7 @@
 package dataStructures;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JobList {
@@ -11,6 +12,16 @@ public class JobList {
 	public JobList(List<Job> jobs, int time) {
 		this.jobs = jobs;
 		this.time = time;
+	}
+	
+	public JobList getSortedJobs(){
+		Collections.sort(jobs);
+		List<Job> jobsFinal = new ArrayList<Job>(jobs.size());
+		for (int i = 0; i < jobs.size(); i++) {
+			Job j = jobs.get(i);
+			jobsFinal.add(new Job(i, j.getProcessingTime(), j.getDueTime(), j.getWeight()));
+		}
+		return new JobList(jobsFinal, time);
 	}
 	
 	public List<Job> getJobs() {

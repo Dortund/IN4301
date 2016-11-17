@@ -53,7 +53,7 @@ public class ExactAlgorithm {
 			System.out.print(jobs.getJob(i).getIndex() + ",");
 		}
 		System.out.println();*/
-		System.out.println(schedule.toString());
+		//System.out.println(schedule.toString());
 		return schedule.getTardiness();
 	}
 	
@@ -148,7 +148,7 @@ public class ExactAlgorithm {
 		
 		count++;
 		if (count % 100000 == 0 ) {
-			System.out.println("Count: " + count);
+			//System.out.println("Count: " + count);
 		}
 		/*try {
 			Thread.sleep(10);
