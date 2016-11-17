@@ -78,7 +78,7 @@ public class ComputeTardiness {
 			String[] lines = file.split("#");
 			if (
 					!file.startsWith("custom") &&
-					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 15 
+					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10 
 					//&& lines[0].endsWith("random_RDD=0.4_TF=0.2_")
 					//file.startsWith("custom")
 					) {

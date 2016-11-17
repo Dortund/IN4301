@@ -112,8 +112,8 @@ public class ExactAlgorithm {
 			int r1 = 0;
 			int r2 = 0;
 			if (l1 != null) {
-				//r1 = l1.getTardiness();
-				r1 = this.getTardines(l1, jobsIn.getTime());
+				r1 = l1.getTardiness();
+				//r1 = this.getTardines(l1, jobsIn.getTime());
 			}
 			if (l2 != null) {
 				//r2 = l2.getTardiness();
