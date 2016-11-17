@@ -19,7 +19,7 @@ public class Main {
 		
 		JobList jList = getJobList(path);
 		ExactAlgorithm eA = new ExactAlgorithm(jList);
-		int res = eA.solve();
+		int res = (int) eA.solve();
 		System.out.println(res + " " + 1);
 	}
 	

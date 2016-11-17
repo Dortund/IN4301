@@ -7,9 +7,9 @@ import java.util.List;
 public class JobList {
 
 	private List<Job> jobs;
-	private int time;
+	private float time;
 	
-	public JobList(List<Job> jobs, int time) {
+	public JobList(List<Job> jobs, float time) {
 		this.jobs = jobs;
 		this.time = time;
 	}
@@ -52,7 +52,9 @@ public class JobList {
 	public Job getLongestProcessingJob() {
 		float max = 0;
 		Job j = null;
-		for (Job job : this.jobs) {
+		//for (Job job : this.jobs) {
+		for (int i = this.jobs.size() -1; i >= 0; i--) {
+			Job job = this.jobs.get(i);
 			if (max < job.getProcessingTime()) {
 				max = job.getProcessingTime();
 				j = job;
@@ -61,8 +63,8 @@ public class JobList {
 		return j;
 	}
 	
-	public int getMaximumCompletionTime() {
-		return (int) Math.ceil(jobs.size()*this.getLongestProcessingTime());
+	public float getMaximumCompletionTime() {
+		return jobs.size()*this.getLongestProcessingTime();
 	}
 	
 	/*public int getIntegerRepresentation() {
@@ -73,18 +75,20 @@ public class JobList {
 		return res;
 	}*/
 	
-	public int getTime() {
+	public float getTime() {
 		return this.time;
 	}
 	
-	public void setTime(int time) {
+	public void setTime(float time) {
 		this.time = time;
 	}
 	
-	public JobList getSubset(int i, int j, float pTime) {
+	public JobList getSubset(int i, int j, Job jobK) {
 		List<Job> jobs = new ArrayList<Job>(Math.max(0, j-i+1));
 		for (Job job : this.jobs) {
-			if (job.getIndex() >= i && job.getIndex() <= j && job.getProcessingTime() < pTime) {
+			if (job.getIndex() >= i && job.getIndex() <= j 
+					&& job.getProcessingTime() <= jobK.getProcessingTime()
+					&& job.getIndex() != jobK.getIndex()) {
 				jobs.add(job);
 			}
 		}

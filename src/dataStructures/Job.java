@@ -5,9 +5,9 @@ public class Job  implements Comparable<Job>{
 	private int index;
 	private float processingTime;
 	private float dueTime;
-	private int weight;
+	private float weight;
 	
-	public Job(int index, float processingTime, float dueTime, int weight) {
+	public Job(int index, float processingTime, float dueTime, float weight) {
 		this.index = index;
 		this.processingTime = processingTime;
 		this.dueTime = dueTime;
@@ -30,7 +30,7 @@ public class Job  implements Comparable<Job>{
 		return this.dueTime;
 	}
 	
-	public int getWeight() {
+	public float getWeight() {
 		return this.weight;
 	}
 

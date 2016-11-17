@@ -21,8 +21,8 @@ public class Schedule implements Comparable<Schedule> {
 	// tardiness can be calculated instead of memorized
 	// however, we need to calculate it a lot, so we memorize it
 	// if memory is an issue, however, try calculating it
-	private int tardiness;
-	private int startTime;
+	private float tardiness;
+	private float startTime;
 	
 	public Schedule(){
 		this.previous = null;
@@ -51,7 +51,7 @@ public class Schedule implements Comparable<Schedule> {
 		if (this.previous!= null)
 			this.previous.next = this;
 		this.job = job;
-		this.tardiness = (int) Math.max(0, getTotalTime() - this.job.getDueTime());
+		this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime());
 		this.startTime = 0;
 		
 		if(previous != null) {
@@ -62,7 +62,7 @@ public class Schedule implements Comparable<Schedule> {
 	// used by the best-first search
 	// currently, schedules are traversed in smallest total tardiness order
 	public int compareTo(Schedule o){
-		return getTardiness() - o.getTardiness();
+		return (int) (getTardiness() - o.getTardiness());
 		
 		// replace with the following to get a depth-first search
 		// return get_depth() - o.get_depth();
@@ -74,27 +74,27 @@ public class Schedule implements Comparable<Schedule> {
 		return depth;
 	}
 	
-	public int getTotalTime(){
+	public float getTotalTime(){
 		float time = job.getProcessingTime();
 		if(previous != null)
 			time += previous.getTotalTime();
 		else
 			time += this.startTime;
-		return (int) time;
+		return time;
 	}
 	
-	public int getTardiness(){
+	public float getTardiness(){
 		return tardiness;
 	}
 	
-	public void updateStartTime(int time) {
+	public void updateStartTime(float time) {
 		this.startTime = time;
 		if (this.previous != null) {
 			this.previous.updateStartTime(time);
-			this.tardiness = (int) Math.max(0, getTotalTime() - this.job.getDueTime()) + previous.tardiness;
+			this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime()) + previous.tardiness;
 		}
 		else {
-			this.tardiness = (int) Math.max(0, getTotalTime() - this.job.getDueTime());
+			this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime());
 		}
 	}
 	

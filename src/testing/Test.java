@@ -50,7 +50,7 @@ public class Test {
 						}
 					}
 					ExactAlgorithm eA = new ExactAlgorithm(jList);
-					int res = eA.solve();
+					float res = eA.solve();
 					System.out.println(res);
 				}
 				catch (Exception e) {
@@ -90,7 +90,7 @@ public class Test {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		fixInput(jobs);
+		//fixInput(jobs);
 		Collections.sort(jobs);
 		List<Job> jobsFinal = new ArrayList<Job>(jobs.size());
 		for (int i = 0; i < jobs.size(); i++) {
@@ -187,7 +187,7 @@ public class Test {
 		//run and time the Approximation Algorithm
 		System.out.println("\tRunning Approx");
 		startTime = System.nanoTime();
-		String approxTardiness = "" + approx.solve(epsilon);
+		String approxTardiness = "";// + approx.solve(epsilon);
 		endTime = System.nanoTime();
 		String approxTime = "" + (endTime-startTime);
 		
