@@ -36,10 +36,19 @@ public class Job  implements Comparable<Job>{
 
 	@Override
 	public int compareTo(Job other) {
+		// Check due time
 		if (this.getDueTime() < other.getDueTime()) {
 			return -1;
 		}
 		if (this.getDueTime() > other.getDueTime()) {
+			return 1;
+		}
+		
+		// Due time is equal, check processing time
+		if (this.getProcessingTime() < other.getProcessingTime()) {
+			return -1;
+		}
+		if (this.getProcessingTime() > other.getProcessingTime()) {
 			return 1;
 		}
 		return 0;

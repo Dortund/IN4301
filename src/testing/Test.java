@@ -8,58 +8,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import algorithms.*;
 import dataStructures.Job;
 import dataStructures.JobList;
 import sampleCode.*;
+
 import java.io.PrintWriter;
 
 public class Test {
 
-	public static void main2(String[] args) {
-		/*String arg = "D:/Gebruikers/nomen/Documents/IN4301/IN4301/testSets/random_RDD=0.2_TF=0.2_#5.dat";
-		JobList jList = getJobList(arg);
-		ExactAlgorithm eA = new ExactAlgorithm(jList);
-		int res = eA.solve();
-		System.out.println(res);*/
-		
-		File files = new File("D:/Gebruikers/nomen/Documents/IN4301/IN4301/testSets");
-		
-		List<String> list = Arrays.asList(files.list());
-		Collections.sort(list);
-		
-		for (String file : list) {
-			String[] lines = file.split("#");
-			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 10
-					&& lines[0].endsWith("random_RDD=0.2_TF=0.8_")) {
-				try {
-					System.out.println("Starting on: " + file);
-					String str = files.getAbsolutePath() + "/" + file;
-					boolean found = false;
-					JobList jList = getJobList(str);
-					for (int i = 0; i < jList.size(); i++) {
-						for (int j = i+1; j < jList.size(); j++) {
-							if (jList.getJob(i).getProcessingTime() == jList.getJob(j).getProcessingTime() && !found) {
-								System.err.println(file);
-								found = true;
-							}
-						}
-					}
-					ExactAlgorithm eA = new ExactAlgorithm(jList);
-					int res = eA.solve();
-					System.out.println(res);
-				}
-				catch (Exception e) {
-					System.err.println(e.toString());
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args){
-		float epsilon = 2;
+	public static void main(String[] args) throws Exception{
+		float epsilon = 0.5f;
 		System.out.println("Starting with tests, epsilon = " + epsilon);
 		runTests(epsilon);
 		System.out.println("Done running test with epsilon = " + epsilon);
@@ -88,6 +51,7 @@ public class Test {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		fixInput(jobs);
 		Collections.sort(jobs);
 		List<Job> jobsFinal = new ArrayList<Job>(jobs.size());
 		for (int i = 0; i < jobs.size(); i++) {
@@ -97,7 +61,23 @@ public class Test {
 		return new JobList(jobsFinal, 0);
 	}
 	
-	public static void runTests(float epsilon){
+	public static void fixInput(List<Job> jobs) {
+		Map<Integer, Integer> doubles = new HashMap<Integer,Integer>();
+		for (int i = 0; i < jobs.size(); i++) {
+			for (int j = i+1; j < jobs.size(); j++) {
+				if (jobs.get(i).getProcessingTime() == jobs.get(j).getProcessingTime()) {
+					int count = 1;
+					if (doubles.containsKey(jobs.get(i).getProcessingTime())) {
+						count = doubles.get(jobs.get(i).getProcessingTime()) + 1;
+					}
+					jobs.get(j).offsetProcessintTime(count * 0.0001f);
+					doubles.put((int) jobs.get(i).getProcessingTime(), count);
+				}
+			}
+		}
+	}
+
+	public static void runTests(float epsilon) throws Exception{
 		File folder = new File("./testSets");
 		File[] listOfFiles = folder.listFiles();
 		
@@ -112,7 +92,7 @@ public class Test {
 		    }
 		    writer.close();
 		} catch (Exception e) {
-		   // do something
+		   throw e;
 		}
 		
 		//System.out.println("RDD, TF, n, Tardiness BestFirst, Runtime BestFirst, Tardiness Greedy, Runtime Greedy, Tardiness Exact, Runtime Exact, Tardiness Approx, Runtime Approx");
@@ -161,7 +141,7 @@ public class Test {
 		//run and time the Exact Algorithm
 		System.out.println("\tRunning Exact");
 		startTime = System.nanoTime();
-		String exactTardiness = "" + exact.solve();
+		String exactTardiness = "" + exact.solve().getTardiness();
 		endTime = System.nanoTime();
 		String exactTime = "" + (endTime-startTime);
 		
@@ -175,5 +155,4 @@ public class Test {
 		String[] results = {RDD, TF, n, bfTardiness, bfTime, greedyTardiness, greedyTime, exactTardiness, exactTime, approxTardiness, approxTime};
 		return String.join(", ", results);
 	}
-	
 }

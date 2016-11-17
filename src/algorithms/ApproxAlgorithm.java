@@ -3,6 +3,7 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
+import sampleCode.Schedule;
 import dataStructures.Job;
 import dataStructures.JobList;
 import algorithms.ExactAlgorithm;
@@ -32,9 +33,24 @@ public class ApproxAlgorithm {
 		scaled_jobs = new JobList(scaleJobs(), 0);
 		//execute the exact algorithm on the scaled jobs
 		ExactAlgorithm eA = new ExactAlgorithm(scaled_jobs);
-		t = eA.solve();
+		Schedule schedule = eA.solve();
+		
 		//return the tardiness in the orignal scale
-		return t*k;
+		schedule = rescale(schedule);
+		return schedule.getTardiness();
+	}
+	
+	private Schedule rescale(Schedule scaled){
+		int size = scaled.getDepth();
+		scaled = scaled.getFirst();
+		Schedule unscaled = null;
+		for(int i = 0; i < size; i++){
+			Job scaledJob = scaled.getJob();
+			int id = scaledJob.getIndex();
+			unscaled = new Schedule(unscaled, original_jobs.getJob(id));
+			scaled = scaled.next();
+		}
+		return unscaled;
 	}
 	
 	private float getTMax(){

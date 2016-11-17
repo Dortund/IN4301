@@ -24,7 +24,7 @@ public class ExactAlgorithm2 {
 		//cache = new HashMap<JobList, Integer>(this.jobs.getIntegerRepresentation() * this.jobs.getMaximumCompletionTime());
 		cache = new HashMap<JobList, Integer>();
 		//System.out.println("Things: " + this.jobs.getIntegerRepresentation() * this.jobs.getMaximumCompletionTime());
-		this.fixInput();
+		//this.fixInput();
 		/*for (Job job : this.jobs.getJobs()) {
 			System.out.println(job);
 		}*/

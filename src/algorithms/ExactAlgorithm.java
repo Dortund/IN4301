@@ -25,7 +25,7 @@ public class ExactAlgorithm {
 		//cache = new HashMap<JobList, Integer>(this.jobs.getIntegerRepresentation() * this.jobs.getMaximumCompletionTime());
 		cache = new HashMap<JobList, Schedule>();
 		//System.out.println("Things: " + this.jobs.getIntegerRepresentation() * this.jobs.getMaximumCompletionTime());
-		this.fixInput();
+		//this.fixInput();
 		/*for (Job job : this.jobs.getJobs()) {
 			System.out.println(job);
 		}*/
@@ -47,22 +47,27 @@ public class ExactAlgorithm {
 		}
 	}
 	
-	public int solve() {
-		Schedule schedule = this.solve(this.jobs);
+	public Schedule solve() {
+		Schedule schedule = this.solve(this.jobs, 0, this.jobs.size()-1, 0,-1);
 		/*for (Integer i : indices) {
 			System.out.print(jobs.getJob(i).getIndex() + ",");
 		}
 		System.out.println();*/
+		//System.out.println("Ex: " + schedule.toString());
 		//System.out.println(schedule.toString());
-		return schedule.getTardiness();
+		return schedule;
 	}
 	
-	private Schedule solve(JobList jobsIn) {
-		
+	private Schedule solve(JobList jobsIn, int i, int j, int depth, int delta) {
+		//System.out.println("("+depth+","+delta+") "+jobsIn);
 		/*if (!jobsIn.sanityCheck()) {
 			int x = 9;
 			int y = x;
 		}*/
+		if (depth == 1 && delta == 0) {
+			int x = 9;
+			int y = x;
+		}
 		
 		if (jobsIn.size() == 0) {
 			return null;
@@ -82,7 +87,10 @@ public class ExactAlgorithm {
 		}
 		
 		Job jobK = jobsIn.getLongestProcessingJob();
-		//System.out.println(jobsIn);
+		
+		//JobList sub = this.jobs.getSubset(i, j, jobK.getProcessingTime());
+		//Job jobK2 = sub.getLongestProcessingJob();
+		
 		int res = Integer.MAX_VALUE;
 		Schedule opt1 = null;
 		Schedule opt2 = null;
@@ -93,22 +101,26 @@ public class ExactAlgorithm {
 			// 1e d = 9
 			// 2e d = 3
 			
-			JobList j1= jobs.getSubset(jobsIn.getJob(0).getIndex(), jobK.getIndex() + d, jobK.getProcessingTime());
-			j1.setTime(0);
-			JobList j2 = jobs.getSubset(jobK.getIndex() + d + 1, jobsIn.getJob(jobsIn.size()-1).getIndex(), jobK.getProcessingTime());
-			j2.setTime((int) (jobK.getProcessingTime()+j1.getCompletionTime()));
+			JobList j1= this.jobs.getSubset(i, jobK.getIndex() + d, jobK.getProcessingTime());
+			j1.setTime(jobsIn.getTime());
+			JobList j2 = this.jobs.getSubset(jobK.getIndex() + d + 1, j, jobK.getProcessingTime());
+			j2.setTime((int) (jobsIn.getTime()+j1.getCompletionTime()+jobK.getProcessingTime()));
 			
-			Schedule l1 = this.solve(j1);
-			Schedule l2 = this.solve(j2);
+			Schedule l1 = this.solve(j1, i, jobK.getIndex() + d, depth+1,d);
+			Schedule l2 = this.solve(j2, jobK.getIndex() + d + 1, j, depth+1,d);
 			
 			int r1 = 0;
 			int r2 = 0;
-			if (l1 != null)
+			if (l1 != null) {
 				r1 = l1.getTardiness();
-			if (l2 != null)
-				r2 = l2.getTardiness();
+				//r1 = this.getTardines(l1, jobsIn.getTime());
+			}
+			if (l2 != null) {
+				//r2 = l2.getTardiness();
+				r2 = this.getTardines(l2, (int) (jobsIn.getTime() + j1.getCompletionTime() +jobK.getProcessingTime()));
+			}
 			
-			int kVal = jobK.getWeight()*Math.max(0, (int) (jobK.getProcessingTime() + j1.getCompletionTime() - jobK.getDueTime()));
+			int kVal = jobK.getWeight()*Math.max(0, (int) (jobsIn.getTime() + j1.getCompletionTime() + jobK.getProcessingTime() - jobK.getDueTime()));
 			
 			int tardiness = r1 + kVal + r2;
 			if (tardiness < res) {
@@ -143,6 +155,12 @@ public class ExactAlgorithm {
 		}
 		
 		fin.updateStartTime(jobsIn.getTime());
+		
+		int check = getTardines(fin, jobsIn.getTime());
+		
+		if (check != fin.getTardiness() || check != res || res != fin.getTardiness()) {
+			System.err.println(depth +"," + delta + ">, " + check + ", " + fin.getTardiness() + ", " + res);
+		}
 		
 		this.cache.put(jobsIn, fin);
 		
@@ -182,13 +200,15 @@ public class ExactAlgorithm {
 		return deltas;
 	}
 	
-	private int getTardines(List<Integer> indices) {
+	private int getTardines(Schedule input, int startTime) {
 		int res = 0;
-		int runningTime = 0;
-		for (Integer i : indices) {
-			Job j = this.jobs.getJob(i);
+		int runningTime = startTime;
+		Schedule s = input.getFirst();
+		while (s != null) {
+			Job j = s.getJob();
 			runningTime += j.getProcessingTime();
 			res += j.getWeight() * Math.max(0, runningTime - j.getDueTime());
+			s = s.next();
 		}
 		return res;
 	}

@@ -176,10 +176,12 @@ public class JobList {
 	@Override
 	public String toString() {
 		String res = "";
-		for (Job job : this.jobs) {
-			res += job.getIndex() + ", ";
+		if (this.jobs.size() != 0) {
+			for (Job job : this.jobs) {
+				res += job.getIndex() + ", ";
+			}
+			res = res.substring(0, res.length()-2);
 		}
-		res = res.substring(0, res.length()-2);
 		return "Time: " + this.time + "; Jobs: " + res;
 	}
 }
