@@ -54,8 +54,8 @@ public class ExactAlgorithm {
 		}
 		System.out.println();*/
 		System.out.println("Ex: " + schedule.toString());
-		//return schedule.getTardiness();
-		return this.getTardines(schedule, 0);
+		//System.out.println(schedule.toString());
+		return schedule.getTardiness();
 	}
 	
 	private Schedule solve(JobList jobsIn, int i, int j, int depth, int delta) {
@@ -166,7 +166,7 @@ public class ExactAlgorithm {
 		
 		count++;
 		if (count % 100000 == 0 ) {
-			System.out.println("Count: " + count);
+			//System.out.println("Count: " + count);
 		}
 		/*try {
 			Thread.sleep(10);
