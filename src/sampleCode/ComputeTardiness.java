@@ -76,12 +76,14 @@ public class ComputeTardiness {
 		
 		for (String file : list) {
 			String[] lines = file.split("#");
-			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 5) {
+			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10 
+					&& lines[0].endsWith("random_RDD=0.2_TF=0.4_")
+					) {
 				//try {
 					System.out.println("Starting on: " + file);
 					String str = files.getAbsolutePath() + "/" + file;
 					
-					ProblemInstance instance = readInstance(str);
+					/*ProblemInstance instance = readInstance(str);
 					
 					for (int i = 0; i< instance.getNumJobs(); i++) {
 						System.out.print(instance.getJobs()[i][0] + ",");
@@ -98,7 +100,18 @@ public class ComputeTardiness {
 					BestFirst bestFirst = new BestFirst(instance);
 					Schedule bestFirstSchedule = bestFirst.getSchedule();
 					//System.out.println(bestFirstSchedule.getTardiness());
-					int bestVal = bestFirstSchedule.getTardiness();
+					int bestVal = bestFirstSchedule.getTardiness();*/
+					
+					boolean found = false;
+					JobList jList = Test.getJobList(str);
+					for (int i = 0; i < jList.size(); i++) {
+						for (int j = i+1; j < jList.size(); j++) {
+							if (jList.getJob(i).getProcessingTime() == jList.getJob(j).getProcessingTime() && !found) {
+								System.err.println("Doubles: " + file);
+								found = true;
+							}
+						}
+					}
 					
 					System.out.println("Computing Exact");
 					JobList jL = Test.getJobList(str);
@@ -112,12 +125,13 @@ public class ComputeTardiness {
 					
 					if (/*greedyVal == bestVal && greedyVal == exact*/ exact == bfa) {
 						System.out.println("Correct: " + file);
+						System.out.println("Exact: " + exact + ", BF: " + bfa /*+ ", Greedy: " + greedyVal + ", Best: " + bestVal*/);
 					}
 					else {
 						System.err.println("Error: " + file);
-						System.err.println("Exact: " + exact + ", BF: " + bfa + ", Greedy: " + greedyVal + ", Best: " + bestVal);
+						System.err.println("Exact: " + exact + ", BF: " + bfa /*+ ", Greedy: " + greedyVal + ", Best: " + bestVal*/);
 					}
-					Thread.sleep(10);
+					Thread.sleep(100);
 				/*}
 				catch (Exception e) {
 					e.printStackTrace();

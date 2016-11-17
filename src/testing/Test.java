@@ -30,7 +30,8 @@ public class Test {
 		
 		for (String file : list) {
 			String[] lines = file.split("#");
-			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 2) {
+			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 10
+					&& lines[0].endsWith("random_RDD=0.2_TF=0.8_")) {
 				try {
 					System.out.println("Starting on: " + file);
 					String str = files.getAbsolutePath() + "/" + file;

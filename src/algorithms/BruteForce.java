@@ -24,7 +24,7 @@ public class BruteForce {
 		}
 		List<Integer> res = solveRec(indices);
 		for (Integer i : res) {
-			System.out.print(jobs.getJob(i).getProcessingTime() + ",");
+			System.out.print("(" + jobs.getJob(i).getIndex() + "," + jobs.getJob(i).getProcessingTime() + "),");
 		}
 		System.out.println();
 		return getTardines(res);
