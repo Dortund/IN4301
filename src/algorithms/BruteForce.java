@@ -23,6 +23,7 @@ public class BruteForce {
 			indices.add(i);
 		}
 		List<Integer> res = solveRec(indices);
+		System.out.print("BF: ");
 		for (Integer i : res) {
 			System.out.print("(" + jobs.getJob(i).getIndex() + "," + jobs.getJob(i).getProcessingTime() + "),");
 		}

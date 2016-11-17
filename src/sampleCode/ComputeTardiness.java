@@ -69,15 +69,18 @@ public class ComputeTardiness {
 	}*/
 	
 	public static void main (String args[]) throws InterruptedException {
-		File files = new File("D:/Gebruikers/nomen/Documents/IN4301/IN4301/testSets");
+		File files = new File("./testSets");
 		
 		List<String> list = Arrays.asList(files.list());
 		Collections.sort(list);
 		
 		for (String file : list) {
 			String[] lines = file.split("#");
-			if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10 
-					&& lines[0].endsWith("random_RDD=0.2_TF=0.4_")
+			if (
+					!file.startsWith("custom") &&
+					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 15 
+					//&& lines[0].endsWith("random_RDD=0.4_TF=0.2_")
+					//file.startsWith("custom")
 					) {
 				//try {
 					System.out.println("Starting on: " + file);
@@ -117,6 +120,11 @@ public class ComputeTardiness {
 					JobList jL = Test.getJobList(str);
 					ExactAlgorithm eA = new ExactAlgorithm(jL);
 					int exact = eA.solve();
+					
+					/*for (int i = 0; i < 1000; i++) {
+						int x = 9;
+						int y = x;
+					}*/
 					
 					System.out.println("Computing Brute Force");
 					JobList jL2 = Test.getJobList(str);

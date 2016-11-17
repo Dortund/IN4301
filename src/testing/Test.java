@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import algorithms.ExactAlgorithm;
 import dataStructures.Job;
@@ -23,7 +25,7 @@ public class Test {
 		int res = eA.solve();
 		System.out.println(res);*/
 		
-		File files = new File("D:/Gebruikers/nomen/Documents/IN4301/IN4301/testSets");
+		File files = new File("./testSets");
 		
 		List<String> list = Arrays.asList(files.list());
 		Collections.sort(list);
@@ -79,6 +81,7 @@ public class Test {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		fixInput(jobs);
 		Collections.sort(jobs);
 		List<Job> jobsFinal = new ArrayList<Job>(jobs.size());
 		for (int i = 0; i < jobs.size(); i++) {
@@ -86,5 +89,21 @@ public class Test {
 			jobsFinal.add(new Job(i, j.getProcessingTime(), j.getDueTime(), j.getWeight()));
 		}
 		return new JobList(jobsFinal, 0);
+	}
+	
+	public static void fixInput(List<Job> jobs) {
+		Map<Integer, Integer> doubles = new HashMap<Integer,Integer>();
+		for (int i = 0; i < jobs.size(); i++) {
+			for (int j = i+1; j < jobs.size(); j++) {
+				if (jobs.get(i).getProcessingTime() == jobs.get(j).getProcessingTime()) {
+					int count = 1;
+					if (doubles.containsKey(jobs.get(i).getProcessingTime())) {
+						count = doubles.get(jobs.get(i).getProcessingTime()) + 1;
+					}
+					jobs.get(j).offsetProcessintTime(count * 0.0001f);
+					doubles.put((int) jobs.get(i).getProcessingTime(), count);
+				}
+			}
+		}
 	}
 }
