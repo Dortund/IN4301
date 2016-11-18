@@ -22,13 +22,13 @@ public class ApproxAlgorithm {
 	public float solve(float epsilon){
 		//first, check if the EDD schedule achieves 0 tardiness
 		float t = getTMax();
-		System.out.println("Tmax = " + t);
+		//System.out.println("Tmax = " + t);
 		if (t == 0)
 			return t;
 		//If not, determine K by the formula given by (Lawler 1982)
 		int n = original_jobs.size();
 		k = 2*epsilon*t/(float)(n*(n+1));
-		System.out.println("k = " + k);
+		//System.out.println("k = " + k);
 		//scale all processing times and due dates by 1/K, rounding down only the processing times
 		scaled_jobs = new JobList(scaleJobs(), 0);
 		//execute the exact algorithm on the scaled jobs

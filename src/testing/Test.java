@@ -20,6 +20,8 @@ import sampleCode.*;
 import java.io.PrintWriter;
 
 public class Test {
+	
+	private static float[] epsilons = {0.1f, 0.5f, 1.0f, 2.0f};
 
 	public static void main(String[] args){
 		float epsilon = 2;
@@ -84,12 +86,17 @@ public class Test {
 		
 		try{
 		    PrintWriter writer = new PrintWriter("testresults.txt", "UTF-8");
-		    writer.println("RDD, TF, n, Tardiness BestFirst, Runtime BestFirst, Tardiness Greedy, Runtime Greedy, Tardiness Exact, Runtime Exact, Tardiness Approx, Runtime Approx");
+		    writer.print("RDD, TF, n, Tardiness BestFirst, Runtime BestFirst, Tardiness Greedy, Runtime Greedy, Tardiness Exact, Runtime Exact");
+		    for (int i = 0; i < epsilons.length; i++){
+		    	writer.print(", Epsilon, Tardiness Approx, Runtime Approx");
+		    }
+		    writer.println();
 		    for (int i = 0; i < listOfFiles.length; i++) {
 		    	System.out.println("Running test " + i);
-		    	String res = runTest(epsilon, listOfFiles[i].getAbsolutePath());
-		    	System.out.println("\tResult: " + res);
-		    	writer.println();
+		    	ArrayList<String> res = runTest(listOfFiles[i].getAbsolutePath());
+		    	String results = String.join(", ", res);
+		    	System.out.println("Results " + results);
+		    	writer.println(results);
 		    }
 		    writer.close();
 		} catch (Exception e) {
@@ -100,14 +107,15 @@ public class Test {
 		//System.out.println("RDD, TF, n, Tardiness BestFirst, Runtime BestFirst, Tardiness Greedy, Runtime Greedy, Tardiness Exact, Runtime Exact, Tardiness Approx, Runtime Approx");
 	}
 	
-	private static String runTest(float epsilon, String fileLoc){
+	private static ArrayList<String> runTest(String fileLoc){
 		//Extract the RDD, TF and N values from the filename.
 		//Assumes filename is structured as <text>RDD=<RDD value>_<text>TF=<TF value>_<text>#<N value>.dat
+		ArrayList<String> results = new ArrayList<String>();
 		String RDD = "Unknown";
 		String TF = "Unknown";
 		String n = "Unknown";
 		System.out.println("\tRunning test " + fileLoc);
-		if (fileLoc.startsWith("random")){
+		if (fileLoc.contains("random")){
 			int start = fileLoc.indexOf("RDD=", 0);
 			int end = fileLoc.indexOf("_", start);
 			RDD = fileLoc.substring(start+4, end);
@@ -120,6 +128,9 @@ public class Test {
 			end = fileLoc.indexOf(".dat", start);
 			n = fileLoc.substring(start+1, end);
 		}
+		results.add(RDD);
+		results.add(TF);
+		results.add(n);
 		
 		//Read the file, creating a JobList and ProblemInstance
 		JobList jobs = Test.getJobList(fileLoc);
@@ -132,19 +143,22 @@ public class Test {
 		ApproxAlgorithm approx = new ApproxAlgorithm(jobs);
 		
 		//Run and time BestFirst
-		System.out.println("\tRunning BestFirst");
+		System.out.println("\tSkipping BestFirst");
 		long startTime = System.nanoTime();
 		String bfTardiness = "";
-		try{
-			bfTardiness = "" + bestFirst.getSchedule().getTardiness();
-		} catch (Exception e)
-		{
-			System.out.println("Unable to finish Best First");
-			bfTardiness = "Failed";
-		}
-		//String bfTardiness = "Very long";
+//		try{
+//			bfTardiness = "" + bestFirst.getSchedule().getTardiness();
+//		} catch (Exception e)
+//		{
+//			System.out.println("Unable to finish Best First");
+//			bfTardiness = "Failed";
+//		}
+		bfTardiness = "N/A";
 		long endTime = System.nanoTime();
 		String bfTime = "" + (endTime-startTime);
+		bfTime = "N/A";
+		results.add(bfTardiness);
+		results.add(bfTime);
 		
 		//Run and time Greedy
 		System.out.println("\tRunning Greedy");
@@ -152,22 +166,43 @@ public class Test {
 		String greedyTardiness = "" + greedy.getSchedule().getTardiness();
 		endTime = System.nanoTime();
 		String greedyTime = "" + (endTime-startTime);
+		results.add(greedyTardiness);
+		results.add(greedyTime);
 		
 		//run and time the Exact Algorithm
-		System.out.println("\tSkipping Exact");
-		startTime = System.nanoTime();
-		String exactTardiness = "" + exact.solve().getTardiness();
-		endTime = System.nanoTime();
-		String exactTime = "" + (endTime-startTime);
+		System.out.println("\tRunning Exact 10x");
+		long time = 0;
+		String exactTardiness = "";
+		for (int i = 0; i < 10; i++)
+		{
+			startTime = System.nanoTime();
+			exactTardiness = "" + exact.solve().getTardiness();
+			endTime = System.nanoTime();
+			time += (endTime-startTime);
+		}
+		String exactTime = "" + (time/10);
+		results.add(exactTardiness);
+		results.add(exactTime);
 		
 		//run and time the Approximation Algorithm
-		System.out.println("\tSkipping Approx");
-		startTime = System.nanoTime();
-		String approxTardiness = "" + approx.solve(epsilon);
-		endTime = System.nanoTime();
-		String approxTime = "" + (endTime-startTime);
+		String approxTardiness = "";
+		String approxTime = "";
+		System.out.println("\tRunning Approx 10x for all epsilons");
+		for (int i = 0; i < epsilons.length; i++){
+			time = 0;
+			for (int j = 0; j < 10; j++)
+			{
+				startTime = System.nanoTime();
+				approxTardiness = "" + approx.solve(epsilons[i]);
+				endTime = System.nanoTime();
+				time += (endTime-startTime);
+			}
+			approxTime = "" + (time/10);
+			results.add(Float.toString(epsilons[i]));
+			results.add(approxTardiness);
+			results.add(approxTime);
+		}
 		
-		String[] results = {RDD, TF, n, bfTardiness, bfTime, greedyTardiness, greedyTime, exactTardiness, exactTime, approxTardiness, approxTime};
-		return String.join(", ", results);
+		return results;
 	}
 }
