@@ -32,6 +32,13 @@ public class Schedule implements Comparable<Schedule> {
 	}
 	
 	// add an additional job to the schedule
+	/**
+	 * FOR USE WITH THE ALGORTIHMS PROVIDED BY BLACKBOARD ONLY
+	 * @param s
+	 * @param jobID
+	 * @param jobLength
+	 * @param jobDueTime
+	 */
 	public Schedule(Schedule s, int jobID, int jobLength, int jobDueTime){		
 		this.previous = s;
 		if (this.previous!= null)
@@ -47,14 +54,20 @@ public class Schedule implements Comparable<Schedule> {
 	}
 	
 	public Schedule(Schedule s, Job job) {
-		this.previous = s;
-		if (this.previous!= null)
-			this.previous.next = this;
 		this.job = job;
-		this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime());
-		this.startTime = 0;
 		
-		if(previous != null) {
+		this.previous = s;
+		if (this.previous != null) {
+			this.previous.next = this;
+		}
+		
+		this.startTime = 0;
+		if (this.previous != null) {
+			this.startTime = previous.getTotalTime();
+		}
+		
+		this.tardiness = Math.max(0, this.getTotalTime() - this.job.getDueTime());
+		if (this.previous != null) {
 			this.tardiness += previous.getTardiness();
 		}
 	}
@@ -74,28 +87,48 @@ public class Schedule implements Comparable<Schedule> {
 		return depth;
 	}
 	
+	/**
+	 * Returns the total amount of processing time needed to complete all the jobs.
+	 * @return The summation of processing times
+	 */
 	public float getTotalTime(){
-		float time = job.getProcessingTime();
+		/*float time = job.getProcessingTime();
 		if(previous != null)
 			time += previous.getTotalTime();
 		else
 			time += this.startTime;
-		return time;
+		return time;*/
+		return this.startTime + this.job.getProcessingTime();
 	}
 	
 	public float getTardiness(){
 		return tardiness;
 	}
 	
+	/**
+	 * Updates the start time for itself and all schedules before it.
+	 * @param time The new start time of the schedule
+	 */
 	public void updateStartTime(float time) {
-		this.startTime = time;
+		if (this.previous != null) {
+			this.previous.updateStartTime(time);
+			this.startTime = this.previous.getTotalTime();
+			this.tardiness = this.previous.getTardiness() + Math.max(0, this.getTotalTime() - this.job.getDueTime());
+		}
+		else {
+			this.startTime = time;
+			this.tardiness = Math.max(0, this.getTotalTime() - this.job.getDueTime()); 
+		}
+		
+		
+		/*this.startTime = time;
 		if (this.previous != null) {
 			this.previous.updateStartTime(time);
 			this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime()) + previous.tardiness;
 		}
 		else {
 			this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime());
-		}
+		}*/
 	}
 	
 	public boolean containsJob(int job){

@@ -2,7 +2,9 @@ package dataStructures;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class JobList {
 
@@ -89,20 +91,20 @@ public class JobList {
 	
 	public JobList getSubsetDelta(float dTime) {
 		List<Job> jobs = new ArrayList<Job>();
-		for (Job job : this.jobs) {
-			if (job.getDueTime() <= dTime) {
-				jobs.add(job);
-			}
+		Iterator<Job> itt = this.jobs.iterator();
+		Job job = null;
+		while (itt.hasNext() && (job = itt.next()) != null && job.getDueTime() <= dTime) {
+			jobs.add(job);
 		}
 		return new JobList(jobs, 0);
 	}
 	
 	public JobList getSubsetDeltaInverse(float dTime) {
 		List<Job> jobs = new ArrayList<Job>();
-		for (Job job : this.jobs) {
-			if (job.getDueTime() > dTime) {
-				jobs.add(job);
-			}
+		ListIterator<Job> itt = this.jobs.listIterator(this.jobs.size());
+		Job job = null;
+		while (itt.hasPrevious() && (job = itt.previous()) != null && job.getDueTime() > dTime) {
+			jobs.add(job);
 		}
 		return new JobList(jobs, 0);
 	}
@@ -151,7 +153,7 @@ public class JobList {
 	
 	@Override
 	public int hashCode() {
-		return this.jobs.size();
+		return this.jobs.hashCode();
 	}
 	
 	@Override

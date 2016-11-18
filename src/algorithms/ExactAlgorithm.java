@@ -11,20 +11,21 @@ import sampleCode.Schedule;
 
 public class ExactAlgorithm {
 	
-	private Map<JobList, Schedule> cache;
+	private Map<Float, Map<JobList, Schedule>> cache;
 	private JobList jobs;
 	
 	public ExactAlgorithm(JobList jobs) {
 		this.jobs = jobs;
-		cache = new HashMap<JobList, Schedule>();
+		cache = new HashMap<Float, Map<JobList, Schedule>>();
 	}
 	
 	public Schedule solve() {
-		Schedule schedule = this.solve(this.jobs, 0, this.jobs.size()-1, 0,-1);
+		Schedule schedule = this.solve(this.jobs, 0, this.jobs.size()-1);
 		return schedule;
 	}
-	
-	private Schedule solve(JobList jobsIn, int i, int j, int depth, int delta) {		
+
+	private Schedule solve(JobList jobsIn, int i, int j) {
+		//System.out.println(jobsIn.toString());
 		if (jobsIn.size() == 0) {
 			return null;
 		}
@@ -35,8 +36,12 @@ public class ExactAlgorithm {
 			return schedule;
 		}
 		
-		if (this.cache.containsKey(jobsIn)) {
-			return this.cache.get(jobsIn);
+		Map<JobList, Schedule> jobLists = this.cache.get(jobsIn.getTime());
+		if (jobLists != null) {
+			Schedule cachedSchedule = jobLists.get(jobsIn);
+			if (cachedSchedule != null) {
+				return cachedSchedule;
+			}
 		}
 		
 		Job jobK = jobsIn.getLongestProcessingJob();
@@ -52,8 +57,8 @@ public class ExactAlgorithm {
 			JobList j2 = jobsIn.getSubset(jobK.getIndex() + d + 1, j, jobK);
 			j2.setTime(jobsIn.getTime()+j1.getCompletionTime()+jobK.getProcessingTime());
 
-			Schedule l1 = this.solve(j1, i, jobK.getIndex() + d, depth+1,d);
-			Schedule l2 = this.solve(j2, jobK.getIndex() + d + 1, j, depth+1,d);
+			Schedule l1 = this.solve(j1, i, jobK.getIndex() + d);
+			Schedule l2 = this.solve(j2, jobK.getIndex() + d + 1, j);
 			
 			float r1 = 0;
 			float r2 = 0;
@@ -99,7 +104,15 @@ public class ExactAlgorithm {
 		
 		fin.updateStartTime(jobsIn.getTime());
 		
-		this.cache.put(jobsIn, fin);
+		Map<JobList, Schedule> c = this.cache.get(jobsIn.getTime());
+		if (c == null) {
+			c = new HashMap<JobList, Schedule>();
+			c.put(jobsIn, fin);
+			this.cache.put(jobsIn.getTime(), c);
+		}
+		else {
+			c.put(jobsIn, fin);
+		}
 		
 		return fin;
 	}

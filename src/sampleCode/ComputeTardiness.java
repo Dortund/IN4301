@@ -74,12 +74,25 @@ public class ComputeTardiness {
 		List<String> list = Arrays.asList(files.list());
 		Collections.sort(list);
 		
+		String a = "01";
+		String b = "10";
+		String c = "001";
+		String d = "100";
+		String e = "010";
+		String f = "101";
+		System.out.println(a.hashCode());
+		System.out.println(b.hashCode());
+		System.out.println(c.hashCode());
+		System.out.println(d.hashCode());
+		System.out.println(e.hashCode());
+		System.out.println(f.hashCode());
+
 		for (String file : list) {
 			String[] lines = file.split("#");
 			if (
 					!file.startsWith("custom") &&
-					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10 
-					//&& lines[0].endsWith("random_RDD=0.4_TF=0.2_")
+					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 100
+					//&& lines[0].endsWith("random_RDD=0.2_TF=0.4_")
 					//file.startsWith("custom")
 					) {
 				//try {
@@ -115,32 +128,36 @@ public class ComputeTardiness {
 							}
 						}
 					}*/
-					
+					long start = System.nanoTime();
 					System.out.println("Computing Exact");
 					JobList jL = Test.getJobList(str);
 					ExactAlgorithm eA = new ExactAlgorithm(jL);
 					int exact = (int)eA.solve().getTardiness();
-
+					
+					//System.out.println(exact);
+					System.err.println((System.nanoTime() - start) / 1000000);
 					
 					/*for (int i = 0; i < 1000; i++) {
 						int x = 9;
 						int y = x;
 					}*/
 					
-					System.out.println("Computing Brute Force");
-					JobList jL2 = Test.getJobList(str);
-					BruteForce bf = new BruteForce(jL2);
-					int bfa = bf.solve();
-					
-					if (/*greedyVal == bestVal && greedyVal == exact*/ exact == bfa) {
-						System.out.println("Correct: " + file);
-						System.out.println("Exact: " + exact + ", BF: " + bfa /*+ ", Greedy: " + greedyVal + ", Best: " + bestVal*/);
+					if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 10) {
+						System.out.println("Computing Brute Force");
+						JobList jL2 = Test.getJobList(str);
+						BruteForce bf = new BruteForce(jL2);
+						int bfa = bf.solve();
+						
+						if (/*greedyVal == bestVal && greedyVal == exact*/ exact == bfa) {
+							System.out.println("Correct: " + file);
+							System.out.println("Exact: " + exact + ", BF: " + bfa/* + ", Greedy: " + greedyVal + ", Best: " + bestVal*/);
+						}
+						else {
+							System.err.println("Error: " + file);
+							System.err.println("Exact: " + exact + ", BF: " + bfa/* + ", Greedy: " + greedyVal + ", Best: " + bestVal*/);
+						}
+						Thread.sleep(100);
 					}
-					else {
-						System.err.println("Error: " + file);
-						System.err.println("Exact: " + exact + ", BF: " + bfa /*+ ", Greedy: " + greedyVal + ", Best: " + bestVal*/);
-					}
-					Thread.sleep(100);
 				/*}
 				catch (Exception e) {
 					e.printStackTrace();
