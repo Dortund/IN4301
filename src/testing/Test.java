@@ -24,11 +24,10 @@ public class Test {
 	private static float[] epsilons = {0.1f, 0.5f, 1.0f, 2.0f};
 
 	public static void main(String[] args){
-		float epsilon = 2;
 
-		System.out.println("Starting with tests, epsilon = " + epsilon);
-		runTests(epsilon);
-		System.out.println("Done running test with epsilon = " + epsilon);
+		System.out.println("Starting with tests");
+		runTests();
+		System.out.println("Done running tests");
 	}
 	
 	public static JobList getJobList(String arg) {
@@ -80,7 +79,7 @@ public class Test {
 		}
 	}
 
-	public static void runTests(float epsilon){
+	public static void runTests(){
 		File folder = new File("./testSets");
 		File[] listOfFiles = folder.listFiles();
 		
@@ -161,17 +160,23 @@ public class Test {
 		results.add(bfTime);
 		
 		//Run and time Greedy
-		System.out.println("\tRunning Greedy");
-		startTime = System.nanoTime();
-		String greedyTardiness = "" + greedy.getSchedule().getTardiness();
-		endTime = System.nanoTime();
-		String greedyTime = "" + (endTime-startTime);
+		System.out.println("\tRunning Greedy 10x");
+		long time = 0;
+		String greedyTardiness = "";
+		for (int i = 0; i < 10; i++)
+		{
+			startTime = System.nanoTime();
+			greedyTardiness = "" + greedy.getSchedule().getTardiness();
+			endTime = System.nanoTime();
+			time += (endTime-startTime);
+		}
+		String greedyTime = "" + (time/10);
 		results.add(greedyTardiness);
 		results.add(greedyTime);
 		
 		//run and time the Exact Algorithm
 		System.out.println("\tRunning Exact 10x");
-		long time = 0;
+		time = 0;
 		String exactTardiness = "";
 		for (int i = 0; i < 10; i++)
 		{
