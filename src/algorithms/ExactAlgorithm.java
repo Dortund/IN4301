@@ -19,13 +19,12 @@ public class ExactAlgorithm {
 		cache = new HashMap<JobList, Schedule>();
 	}
 	
-	public float solve() {
+	public Schedule solve() {
 		Schedule schedule = this.solve(this.jobs, 0, this.jobs.size()-1, 0,-1);
-		return schedule.getTardiness();
+		return schedule;
 	}
 	
-	private Schedule solve(JobList jobsIn, int i, int j, int depth, int delta) {
-		
+	private Schedule solve(JobList jobsIn, int i, int j, int depth, int delta) {		
 		if (jobsIn.size() == 0) {
 			return null;
 		}
@@ -52,7 +51,7 @@ public class ExactAlgorithm {
 			j1.setTime(jobsIn.getTime());
 			JobList j2 = jobsIn.getSubset(jobK.getIndex() + d + 1, j, jobK);
 			j2.setTime(jobsIn.getTime()+j1.getCompletionTime()+jobK.getProcessingTime());
-			
+
 			Schedule l1 = this.solve(j1, i, jobK.getIndex() + d, depth+1,d);
 			Schedule l2 = this.solve(j2, jobK.getIndex() + d + 1, j, depth+1,d);
 			

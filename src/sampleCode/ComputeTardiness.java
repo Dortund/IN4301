@@ -119,7 +119,8 @@ public class ComputeTardiness {
 					System.out.println("Computing Exact");
 					JobList jL = Test.getJobList(str);
 					ExactAlgorithm eA = new ExactAlgorithm(jL);
-					float exact = eA.solve();
+					int exact = (int)eA.solve().getTardiness();
+
 					
 					/*for (int i = 0; i < 1000; i++) {
 						int x = 9;
