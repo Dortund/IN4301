@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import algorithms.ApproxAlgorithm;
 import algorithms.ExactAlgorithm;
 import dataStructures.Job;
 import dataStructures.JobList;
@@ -14,13 +15,17 @@ import dataStructures.JobList;
 public class Main {
 
 	public static void main(String[] args) {
-		//int epsilon = Integer.parseInt(args[0]);
+		float epsilon = Float.parseFloat(args[0]);
 		String path = args[1];
 		
 		JobList jList = getJobList(path);
 		ExactAlgorithm eA = new ExactAlgorithm(jList);
 		int res = (int)eA.solve().getTardiness();
-		System.out.println(res + " " + 1);
+		
+		ApproxAlgorithm aa = new ApproxAlgorithm(getJobList(path));
+		float res2 = aa.solve(epsilon);
+		
+		System.out.println(res + " " + res2);
 	}
 	
 	public static JobList getJobList(String arg) {
