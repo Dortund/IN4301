@@ -23,8 +23,9 @@ public class BestFirst {
 		}
 		
 		Schedule bestSchedule = null;
-		
-		while(Q.peek() != null){
+		long start = System.currentTimeMillis();
+		long end = start + 300*1000; // 300 seconds * 1000 ms/sec
+		while(Q.peek() != null && System.currentTimeMillis() < end){
 			Schedule s = Q.poll();
 
 			if(s.getDepth() >= numJobs){

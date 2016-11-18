@@ -103,18 +103,23 @@ public class Test {
 	private static String runTest(float epsilon, String fileLoc){
 		//Extract the RDD, TF and N values from the filename.
 		//Assumes filename is structured as <text>RDD=<RDD value>_<text>TF=<TF value>_<text>#<N value>.dat
+		String RDD = "Unknown";
+		String TF = "Unknown";
+		String n = "Unknown";
 		System.out.println("\tRunning test " + fileLoc);
-		int start = fileLoc.indexOf("RDD=", 0);
-		int end = fileLoc.indexOf("_", start);
-		String RDD = fileLoc.substring(start+4, end);
-		
-		start = fileLoc.indexOf("TF=", end);
-		end = fileLoc.indexOf("_", start);
-		String TF = fileLoc.substring(start+3, end);
-		
-		start = fileLoc.indexOf("#");
-		end = fileLoc.indexOf(".dat", start);
-		String n = fileLoc.substring(start+1, end);
+		if (fileLoc.startsWith("random")){
+			int start = fileLoc.indexOf("RDD=", 0);
+			int end = fileLoc.indexOf("_", start);
+			RDD = fileLoc.substring(start+4, end);
+			
+			start = fileLoc.indexOf("TF=", end);
+			end = fileLoc.indexOf("_", start);
+			TF = fileLoc.substring(start+3, end);
+			
+			start = fileLoc.indexOf("#");
+			end = fileLoc.indexOf(".dat", start);
+			n = fileLoc.substring(start+1, end);
+		}
 		
 		//Read the file, creating a JobList and ProblemInstance
 		JobList jobs = Test.getJobList(fileLoc);
@@ -127,10 +132,17 @@ public class Test {
 		ApproxAlgorithm approx = new ApproxAlgorithm(jobs);
 		
 		//Run and time BestFirst
-		System.out.println("\tSkipping BestFirst");
+		System.out.println("\tRunning BestFirst");
 		long startTime = System.nanoTime();
-		//String bfTardiness = "" + bestFirst.getSchedule().getTardiness();
-		String bfTardiness = "Very long";
+		String bfTardiness = "";
+		try{
+			bfTardiness = "" + bestFirst.getSchedule().getTardiness();
+		} catch (Exception e)
+		{
+			System.out.println("Unable to finish Best First");
+			bfTardiness = "Failed";
+		}
+		//String bfTardiness = "Very long";
 		long endTime = System.nanoTime();
 		String bfTime = "" + (endTime-startTime);
 		
@@ -142,14 +154,14 @@ public class Test {
 		String greedyTime = "" + (endTime-startTime);
 		
 		//run and time the Exact Algorithm
-		System.out.println("\tRunning Exact");
+		System.out.println("\tSkipping Exact");
 		startTime = System.nanoTime();
 		String exactTardiness = "" + exact.solve().getTardiness();
 		endTime = System.nanoTime();
 		String exactTime = "" + (endTime-startTime);
 		
 		//run and time the Approximation Algorithm
-		System.out.println("\tRunning Approx");
+		System.out.println("\tSkipping Approx");
 		startTime = System.nanoTime();
 		String approxTardiness = "" + approx.solve(epsilon);
 		endTime = System.nanoTime();
