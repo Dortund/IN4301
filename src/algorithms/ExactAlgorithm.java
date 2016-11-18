@@ -107,6 +107,7 @@ public class ExactAlgorithm {
 	private List<Integer> getDeltas(JobList jobsIn) {
 		List<Integer> deltas = new ArrayList<Integer>();
 		Job jobK = jobsIn.getLongestProcessingJob();
+
 		float dueTime = jobK.getDueTime();
 		
 		while (true) {

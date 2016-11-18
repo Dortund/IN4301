@@ -103,6 +103,7 @@ public class Test {
 	private static String runTest(float epsilon, String fileLoc){
 		//Extract the RDD, TF and N values from the filename.
 		//Assumes filename is structured as <text>RDD=<RDD value>_<text>TF=<TF value>_<text>#<N value>.dat
+		System.out.println("\tRunning test " + fileLoc);
 		int start = fileLoc.indexOf("RDD=", 0);
 		int end = fileLoc.indexOf("_", start);
 		String RDD = fileLoc.substring(start+4, end);
@@ -126,7 +127,7 @@ public class Test {
 		ApproxAlgorithm approx = new ApproxAlgorithm(jobs);
 		
 		//Run and time BestFirst
-		System.out.println("\tRunning BestFirst");
+		System.out.println("\tSkipping BestFirst");
 		long startTime = System.nanoTime();
 		//String bfTardiness = "" + bestFirst.getSchedule().getTardiness();
 		String bfTardiness = "Very long";
@@ -150,7 +151,7 @@ public class Test {
 		//run and time the Approximation Algorithm
 		System.out.println("\tRunning Approx");
 		startTime = System.nanoTime();
-		String approxTardiness = "";// + approx.solve(epsilon);
+		String approxTardiness = "" + approx.solve(epsilon);
 		endTime = System.nanoTime();
 		String approxTime = "" + (endTime-startTime);
 		

@@ -50,7 +50,7 @@ public class JobList {
 	}
 	
 	public Job getLongestProcessingJob() {
-		float max = 0;
+		float max = Integer.MIN_VALUE;
 		Job j = null;
 		//for (Job job : this.jobs) {
 		for (int i = this.jobs.size() -1; i >= 0; i--) {
