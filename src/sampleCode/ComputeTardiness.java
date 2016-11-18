@@ -105,7 +105,7 @@ public class ComputeTardiness {
 					//System.out.println(bestFirstSchedule.getTardiness());
 					int bestVal = bestFirstSchedule.getTardiness();*/
 					
-					boolean found = false;
+					/*boolean found = false;
 					JobList jList = Test.getJobList(str);
 					for (int i = 0; i < jList.size(); i++) {
 						for (int j = i+1; j < jList.size(); j++) {
@@ -114,12 +114,7 @@ public class ComputeTardiness {
 								found = true;
 							}
 						}
-					}
-					
-					if (found) {
-						int x = 9;
-						int y = x;
-					}
+					}*/
 					
 					System.out.println("Computing Exact");
 					JobList jL = Test.getJobList(str);

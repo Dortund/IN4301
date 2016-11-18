@@ -67,14 +67,6 @@ public class JobList {
 		return jobs.size()*this.getLongestProcessingTime();
 	}
 	
-	/*public int getIntegerRepresentation() {
-		int res = 0;
-		for (Job job : this.jobs) {
-			res += Math.pow(2, job.getIndex());
-		}
-		return res;
-	}*/
-	
 	public float getTime() {
 		return this.time;
 	}
@@ -123,17 +115,6 @@ public class JobList {
 		return sum;
 	}
 	
-	/*public int getTardiness(List<Integer> indices) {
-		int res = 0;
-		int runningTime = 0;
-		for (Integer i : indices) {
-			Job j = this.getJob(i);
-			runningTime += j.getProcessingTime();
-			res += j.getWeight() * Math.max(0, runningTime - j.getDueTime());
-		}
-		return res;
-	}*/
-	
 	public boolean sanityCheck() {
 		float due = 0;
 		for (Job job : this.jobs) {
@@ -154,10 +135,6 @@ public class JobList {
 			return false;
 		}
 		JobList input = (JobList) obj;
-		/*if (input.size() == 2 && input.getJob(1).getIndex() == 8) {
-			int x = 9;
-			int y = x;
-		}*/
 		if (this.time != input.time) {
 			return false;
 		}

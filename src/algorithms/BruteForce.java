@@ -23,11 +23,11 @@ public class BruteForce {
 			indices.add(i);
 		}
 		List<Integer> res = solveRec(indices);
-		System.out.print("BF: ");
+		/*System.out.print("BF: ");
 		for (Integer i : res) {
 			System.out.print("(" + jobs.getJob(i).getIndex() + "," + jobs.getJob(i).getProcessingTime() + "),");
 		}
-		System.out.println();
+		System.out.println();*/
 		return getTardines(res);
 	}
 	
@@ -62,20 +62,4 @@ public class BruteForce {
 		}
 		return res;
 	}
-	
-	/*public solveAll() {
-		List<Integer[]> perms = new ArrayList<Integer[]>(factorial(jobs.size()));
-		
-		for (int n = 0; n < jobs.size(); n++) {
-			for
-		}
-	}*/
-	
-	/*private int factorial(int x) {
-		int res = 1;
-		for (int i = 1; i <= x; i++) {
-			res *= i;
-		}
-		return res;
-	}*/
 }
