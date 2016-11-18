@@ -73,26 +73,13 @@ public class ComputeTardiness {
 		
 		List<String> list = Arrays.asList(files.list());
 		Collections.sort(list);
-		
-		String a = "01";
-		String b = "10";
-		String c = "001";
-		String d = "100";
-		String e = "010";
-		String f = "101";
-		System.out.println(a.hashCode());
-		System.out.println(b.hashCode());
-		System.out.println(c.hashCode());
-		System.out.println(d.hashCode());
-		System.out.println(e.hashCode());
-		System.out.println(f.hashCode());
 
 		for (String file : list) {
 			String[] lines = file.split("#");
 			if (
 					!file.startsWith("custom") &&
 					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10
-					&& lines[0].endsWith("random_RDD=0.2_TF=0.2_")
+					//&& lines[0].endsWith("random_RDD=0.2_TF=0.2_")
 					//file.startsWith("custom")
 					) {
 				//try {
@@ -106,7 +93,7 @@ public class ComputeTardiness {
 					}
 					System.out.println();
 				
-					System.out.println("Computing Greedy");
+					/*System.out.println("Computing Greedy");
 					Greedy greedy = new Greedy(instance);
 					Schedule greedySchedule = greedy.getSchedule();
 					//System.out.println(greedySchedule.getTardiness());
@@ -151,13 +138,13 @@ public class ComputeTardiness {
 						BruteForce bf = new BruteForce(jL2);
 						int bfa = bf.solve();
 						
-						if (/*greedyVal == bestVal &&*/ greedyVal == exact && exact == bfa) {
+						if (/*greedyVal == bestVal && greedyVal == exact && */exact == bfa) {
 							System.out.println("Correct: " + file);
-							System.out.println("Exact: " + exact + ", BF: " + bfa + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
+							System.out.println("Exact: " + exact + ", BF: " + bfa/* + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
 						}
 						else {
 							System.err.println("Error: " + file);
-							System.err.println("Exact: " + exact + ", BF: " + bfa + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
+							System.err.println("Exact: " + exact + ", BF: " + bfa/* + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
 						}
 						Thread.sleep(100);
 					}
