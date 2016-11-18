@@ -35,7 +35,7 @@ public class ApproxAlgorithm {
 		ExactAlgorithm eA = new ExactAlgorithm(scaled_jobs);
 		Schedule schedule = eA.solve();
 		
-		//return the tardiness in the orignal scale
+		//return the tardiness in the original scale
 		schedule = rescale(schedule);
 		return schedule.getTardiness();
 	}

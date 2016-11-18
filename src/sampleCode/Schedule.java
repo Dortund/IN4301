@@ -40,15 +40,20 @@ public class Schedule implements Comparable<Schedule> {
 	 * @param jobDueTime
 	 */
 	public Schedule(Schedule s, int jobID, int jobLength, int jobDueTime){		
-		this.previous = s;
-		if (this.previous!= null)
-			this.previous.next = this;
-		Job j = new Job(jobID, jobLength, jobDueTime, 1);
-		this.job = j;
-		this.tardiness = Math.max(0, getTotalTime() - jobDueTime);
-		this.startTime = 0;
+		this.job = new Job(jobID, jobLength, jobDueTime, 1);
 		
-		if(previous != null) {
+		this.previous = s;
+		if (this.previous != null) {
+			this.previous.next = this;
+		}
+		
+		this.startTime = 0;
+		if (this.previous != null) {
+			this.startTime = previous.getTotalTime();
+		}
+		
+		this.tardiness = Math.max(0, this.getTotalTime() - this.job.getDueTime());
+		if (this.previous != null) {
 			this.tardiness += previous.getTardiness();
 		}
 	}
