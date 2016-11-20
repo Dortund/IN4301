@@ -3,10 +3,9 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-import sampleCode.Schedule;
 import dataStructures.Job;
 import dataStructures.JobList;
-import algorithms.ExactAlgorithm;
+import sampleCode.Schedule;
 
 public class ApproxAlgorithm {
 	

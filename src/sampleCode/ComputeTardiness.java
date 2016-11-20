@@ -14,6 +14,7 @@ import algorithms.ExactAlgorithm;
 import dataStructures.JobList;
 import testing.Test;
 
+
 public class ComputeTardiness {	
 	public static ProblemInstance readInstance(String filename){
 		ProblemInstance instance = null;
@@ -91,8 +92,8 @@ public class ComputeTardiness {
 			String[] lines = file.split("#");
 			if (
 					!file.startsWith("custom") &&
-					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10
-					&& lines[0].endsWith("random_RDD=0.2_TF=0.2_")
+					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 101
+					//&& lines[0].endsWith("random_RDD=0.2_TF=0.2_")
 					//file.startsWith("custom")
 					) {
 				//try {
@@ -102,11 +103,11 @@ public class ComputeTardiness {
 					ProblemInstance instance = readInstance(str);
 					
 					for (int i = 0; i< instance.getNumJobs(); i++) {
-						System.out.print(instance.getJobs()[i][0] + ",");
+						//System.out.print(instance.getJobs()[i][0] + ",");
 					}
-					System.out.println();
+					//System.out.println();
 				
-					System.out.println("Computing Greedy");
+					//System.out.println("Computing Greedy");
 					Greedy greedy = new Greedy(instance);
 					Schedule greedySchedule = greedy.getSchedule();
 					//System.out.println(greedySchedule.getTardiness());
@@ -129,16 +130,16 @@ public class ComputeTardiness {
 						}
 					}*/
 					long start = System.nanoTime();
-					System.out.println("Computing Exact");
+					//System.out.println("Computing Exact");
 					JobList jL = Test.getJobList(str);
 					ExactAlgorithm eA = new ExactAlgorithm(jL);
 					Schedule sc = eA.solve();
 					int exact = (int)sc.getTardiness();
 					
-					System.out.println((sc.getTotalTime()) + "--" + (sc.getTardiness()));
+					//System.out.println((sc.getTotalTime()) + "--" + (sc.getTardiness()));
 					
 					//System.out.println(exact);
-					System.err.println((System.nanoTime() - start) / 1000000);
+					//System.err.println((System.nanoTime() - start) / 1000000);
 					
 					/*for (int i = 0; i < 1000; i++) {
 						int x = 9;
@@ -151,15 +152,20 @@ public class ComputeTardiness {
 						BruteForce bf = new BruteForce(jL2);
 						int bfa = bf.solve();
 						
-						if (/*greedyVal == bestVal &&*/ greedyVal == exact && exact == bfa) {
+						if (/*greedyVal == bestVal && greedyVal == exact &&*/ exact == bfa) {
 							System.out.println("Correct: " + file);
-							System.out.println("Exact: " + exact + ", BF: " + bfa + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
+							System.out.println("Exact: " + exact + ", BF: " + bfa/* + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
 						}
 						else {
 							System.err.println("Error: " + file);
-							System.err.println("Exact: " + exact + ", BF: " + bfa + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
+							System.err.println("Exact: " + exact + ", BF: " + bfa/* + ", Greedy: " + greedyVal/* + ", Best: " + bestVal*/);
 						}
 						Thread.sleep(100);
+					}
+					else {
+						if (exact > greedyVal) {
+							System.err.println("stress");
+						}
 					}
 				/*}
 				catch (Exception e) {
