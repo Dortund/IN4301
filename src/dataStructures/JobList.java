@@ -8,14 +8,19 @@ import java.util.ListIterator;
 
 public class JobList {
 
-	private List<Job> jobs;
-	private float time;
+	protected List<Job> jobs;
+	protected float time;
 	
 	public JobList(List<Job> jobs, float time) {
 		this.jobs = jobs;
 		this.time = time;
 	}
 	
+	public JobList(JobList joblist) {
+		this.jobs = joblist.getJobs();
+		this.time = joblist.getTime();
+	}
+
 	public JobList getSortedJobs(){
 		Collections.sort(jobs);
 		List<Job> jobsFinal = new ArrayList<Job>(jobs.size());

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import dataStructures.Job;
 import dataStructures.JobList;
+import dataStructures.JobListDelta;
 import sampleCode.Schedule;
 
 public class ExactAlgorithm {
@@ -123,19 +124,27 @@ public class ExactAlgorithm {
 
 		float dueTime = jobK.getDueTime();
 		
+		JobListDelta jd = new JobListDelta(jobsIn);
+		
 		while (true) {
-			JobList j1 = jobsIn.getSubsetDelta(dueTime);
-			float dueNew = jobsIn.getTime() + j1.getCompletionTime();
+			//JobList j1 = jobsIn.getSubsetDelta(dueTime);
+			//float dueNew = jobsIn.getTime() + j1.getCompletionTime();
+			float dueNew = jobsIn.getTime() + jd.findNewIndex(dueTime);
 			if (dueNew > dueTime) {
 				dueTime = dueNew;
 				continue;
 			}
-			deltas.add(j1.getJob(j1.size()-1).getIndex() - jobK.getIndex());
-			JobList j2 = jobsIn.getSubsetDeltaInverse(dueTime);
+			//deltas.add(j1.getJob(j1.size()-1).getIndex() - jobK.getIndex());
+			deltas.add(jd.getDeltaJob().getIndex() - jobK.getIndex());
+			/*JobList j2 = jobsIn.getSubsetDeltaInverse(dueTime);
 			if (j2.size() == 0) {
 				break;
+			}*/
+			if (jd.isFinished()) {
+				break;
 			}
-			dueTime = j2.getJob(0).getDueTime();
+			//dueTime = j2.getJob(j2.size()-1).getDueTime();
+			dueTime = jd.getNext().getDueTime();
 		}
 		
 		return deltas;

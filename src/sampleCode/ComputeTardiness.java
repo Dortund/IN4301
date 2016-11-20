@@ -91,8 +91,8 @@ public class ComputeTardiness {
 			String[] lines = file.split("#");
 			if (
 					!file.startsWith("custom") &&
-					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) == 10
-					&& lines[0].endsWith("random_RDD=0.2_TF=0.2_")
+					Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 101
+					//&& lines[0].endsWith("random_RDD=0.2_TF=0.2_")
 					//file.startsWith("custom")
 					) {
 				//try {
@@ -145,7 +145,7 @@ public class ComputeTardiness {
 						int y = x;
 					}*/
 					
-					if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 10) {
+					if (Integer.parseInt(lines[1].substring(0, lines[1].indexOf("."))) <= 1) {
 						System.out.println("Computing Brute Force");
 						JobList jL2 = Test.getJobList(str);
 						BruteForce bf = new BruteForce(jL2);
