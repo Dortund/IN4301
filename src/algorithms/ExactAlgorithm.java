@@ -135,7 +135,7 @@ public class ExactAlgorithm {
 			if (j2.size() == 0) {
 				break;
 			}
-			dueTime = j2.getJob(0).getDueTime();
+			dueTime = j2.getJob(j2.size()-1).getDueTime();
 		}
 		
 		return deltas;
