@@ -15,7 +15,7 @@ public class BestFirst {
 	// It uses a PriorityQueue to store schedules, in every iteration
 	// it gets the next best schedule, tries to append all possible jobs
 	// and stores the resulting schedules on the queue
-	public Schedule getSchedule() {
+	public Schedule getSchedule(int seconds) {
 		PriorityQueue<Schedule> Q = new PriorityQueue<Schedule>();
 		
 		for(int i = 0; i < numJobs; ++i){
@@ -24,7 +24,7 @@ public class BestFirst {
 		
 		Schedule bestSchedule = null;
 		long start = System.currentTimeMillis();
-		long end = start + 300*1000; // 300 seconds * 1000 ms/sec
+		long end = start + seconds*1000; // seconds * 1000 = ms
 		while(Q.peek() != null && System.currentTimeMillis() < end){
 			Schedule s = Q.poll();
 

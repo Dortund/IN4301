@@ -144,18 +144,27 @@ public class Test {
 		//Run and time BestFirst
 		System.out.println("\tSkipping BestFirst");
 		long startTime = System.nanoTime();
+		long endTime = startTime;
 		String bfTardiness = "";
-//		try{
-//			bfTardiness = "" + bestFirst.getSchedule().getTardiness();
-//		} catch (Exception e)
-//		{
-//			System.out.println("Unable to finish Best First");
-//			bfTardiness = "Failed";
-//		}
-		bfTardiness = "N/A";
-		long endTime = System.nanoTime();
-		String bfTime = "" + (endTime-startTime);
-		bfTime = "N/A";
+		String bfTime = "";
+		int size = Integer.MAX_VALUE;
+		try{size = Integer.parseInt(n);}catch (Exception e){}
+		if (size <= 10){
+			try{
+				bfTardiness = "" + bestFirst.getSchedule(150).getTardiness();
+			} catch (Exception e)
+			{
+				System.out.println("Unable to finish Best First");
+				bfTardiness = "Failed";
+			}
+			endTime = System.nanoTime();
+			bfTime = "" + (endTime-startTime);
+		}
+		else
+		{
+			bfTardiness = "N/A";
+			bfTime = "N/A";
+		}
 		results.add(bfTardiness);
 		results.add(bfTime);
 		
