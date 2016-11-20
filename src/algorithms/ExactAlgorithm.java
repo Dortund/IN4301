@@ -11,17 +11,20 @@ import sampleCode.Schedule;
 public class ExactAlgorithm
 {
   private Map<Float, Map<JobList, Schedule>> cache;
+  //private Map<JobList, Schedule> cache;
   private JobList jobs;
   
   public ExactAlgorithm(JobList jobs)
   {
     this.jobs = jobs;
     this.cache = new HashMap<Float, Map<JobList, Schedule>>();
+    //this.cache = new HashMap<JobList, Schedule>();
   }
   
   public Schedule solve()
   {
     Schedule schedule = solve(this.jobs, 0, this.jobs.size() - 1, 0, -1);
+    System.out.println("count: " + count);
     return schedule;
   }
   int count = 0;
@@ -138,11 +141,23 @@ public class ExactAlgorithm
       else
       {
         deltas.add(Integer.valueOf(j1.getJob(j1.size() - 1).getIndex() - jobK.getIndex()));
-        JobList j2 = jobsIn.getSubsetDeltaInverse(dueTime);
+        JobList j3 = jobsIn.getSubsetDeltaInverse(dueTime);
+        JobList j2 = jobsIn.getSubsetDeltaInverseNew(dueTime);
+        if (j2.size() != j3.size()) {
+        	boolean res = true;
+        	for (Job jo : j2.getJobs()) {
+        		res &= j3.getJobs().contains(jo);
+        	}
+        	if (!res) {
+        		int x = 9;
+        		int y = x;
+        	}
+        }
+        
         if (j2.size() == 0) {
           break;
         }
-        dueTime = j2.getJob(0).getDueTime();
+        dueTime = j2.getJob(j2.size()-1).getDueTime();
       }
     }
     return deltas;

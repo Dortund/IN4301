@@ -2,7 +2,9 @@ package dataStructures;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class JobList
 {
@@ -87,26 +89,26 @@ public class JobList
   
   public JobList getSubset(int i, int j, Job jobK)
   {
-    List<Job> jobs = new ArrayList<Job>(Math.max(0, j - i + 1));
-    for (Job job : this.jobs) {
-      if ((job.getIndex() >= i) && (job.getIndex() <= j) && 
-        (job.getProcessingTime() <= jobK.getProcessingTime()) && 
-        (job.getIndex() != jobK.getIndex())) {
-        jobs.add(job);
-      }
-    }
-    return new JobList(jobs, 0.0F);
+	  List<Job> jobs = new ArrayList<Job>(Math.max(0, j-i+1));
+		for (Job job : this.jobs) {
+			if (job.getIndex() >= i && job.getIndex() <= j 
+					&& job.getProcessingTime() <= jobK.getProcessingTime()
+					&& job.getIndex() != jobK.getIndex()) {
+				jobs.add(job);
+			}
+		}
+		return new JobList(jobs, 0);
   }
   
   public JobList getSubsetDelta(float dTime)
   {
-    List<Job> jobs = new ArrayList<Job>();
-    for (Job job : this.jobs) {
-      if (job.getDueTime() <= dTime) {
-        jobs.add(job);
-      }
-    }
-    return new JobList(jobs, 0.0F);
+	  List<Job> jobs = new ArrayList<Job>();
+		Iterator<Job> itt = this.jobs.iterator();
+		Job job = null;
+		while (itt.hasNext() && (job = itt.next()) != null && job.getDueTime() <= dTime) {
+			jobs.add(job);
+		}
+		return new JobList(jobs, 0);
   }
   
   public JobList getSubsetDeltaInverse(float dTime)
@@ -118,6 +120,17 @@ public class JobList
       }
     }
     return new JobList(jobs, 0.0F);
+  }
+  
+  public JobList getSubsetDeltaInverseNew(float dTime)
+  {
+	  List<Job> jobs = new ArrayList<Job>();
+		ListIterator<Job> itt = this.jobs.listIterator(this.jobs.size());
+		Job job = null;
+		while (itt.hasPrevious() && (job = itt.previous()) != null && job.getDueTime() > dTime) {
+			jobs.add(job);
+		}
+		return new JobList(jobs, 0);
   }
   
   public int getCompletionTime()

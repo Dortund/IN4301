@@ -75,7 +75,7 @@ public class ComputeTardiness {
 		List<String> list = Arrays.asList(files.list());
 		Collections.sort(list);
 		
-		String a = "01";
+		/*String a = "01";
 		String b = "10";
 		String c = "001";
 		String d = "100";
@@ -86,7 +86,7 @@ public class ComputeTardiness {
 		System.out.println(c.hashCode());
 		System.out.println(d.hashCode());
 		System.out.println(e.hashCode());
-		System.out.println(f.hashCode());
+		System.out.println(f.hashCode());*/
 
 		for (String file : list) {
 			String[] lines = file.split("#");
