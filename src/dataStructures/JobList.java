@@ -114,6 +114,7 @@ public class JobList {
 	
 	/**
 	 * Get a subset of jobs for which their due time is greater then dTime.
+	 * WARNING: RETURNS REVERSED LIST
 	 * @param dTime The value to compare due time to
 	 * @return A new JobList with the specified set
 	 */
