@@ -31,13 +31,12 @@ public class Schedule implements Comparable<Schedule> {
 		this.startTime = 0;
 	}
 	
-	// add an additional job to the schedule
 	/**
-	 * FOR USE WITH THE ALGORTIHMS PROVIDED BY BLACKBOARD ONLY
-	 * @param s
-	 * @param jobID
-	 * @param jobLength
-	 * @param jobDueTime
+	 * Add a new job to the end of the schedule
+	 * @param s The preceding schedule
+	 * @param jobID The job id
+	 * @param jobLength The processing length
+	 * @param jobDueTime The due time of the job
 	 */
 	public Schedule(Schedule s, int jobID, int jobLength, int jobDueTime){		
 		this.job = new Job(jobID, jobLength, jobDueTime, 1);
@@ -58,6 +57,11 @@ public class Schedule implements Comparable<Schedule> {
 		}
 	}
 	
+	/**
+	 * Add a new job to the end of the schedule
+	 * @param s The preceding schedule
+	 * @param job The job to add
+	 */
 	public Schedule(Schedule s, Job job) {
 		this.job = job;
 		
@@ -106,6 +110,10 @@ public class Schedule implements Comparable<Schedule> {
 		return this.startTime + this.job.getProcessingTime();
 	}
 	
+	/**
+	 * Get the total tardiness of this and the previous jobs
+	 * @return The total tardiness of this schedule
+	 */
 	public float getTardiness(){
 		return tardiness;
 	}
@@ -124,16 +132,6 @@ public class Schedule implements Comparable<Schedule> {
 			this.startTime = time;
 			this.tardiness = Math.max(0, this.getTotalTime() - this.job.getDueTime()); 
 		}
-		
-		
-		/*this.startTime = time;
-		if (this.previous != null) {
-			this.previous.updateStartTime(time);
-			this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime()) + previous.tardiness;
-		}
-		else {
-			this.tardiness = Math.max(0, getTotalTime() - this.job.getDueTime());
-		}*/
 	}
 	
 	public boolean containsJob(int job){
@@ -144,10 +142,18 @@ public class Schedule implements Comparable<Schedule> {
 		return this.job;
 	}
 	
+	/**
+	 * When used by the ExactAlgorithm, the schedule is expected to be a double linked list. So we can request the next scheduled job.
+	 * @return The scheduled job after this one
+	 */
 	public Schedule next() {
 		return this.next;
 	}
 	
+	/**
+	 * Get the first scheduled job
+	 * @return
+	 */
 	public Schedule getFirst() {
 		if (this.previous == null)
 			return this;

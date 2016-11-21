@@ -16,6 +16,10 @@ public class JobList {
 		this.time = time;
 	}
 	
+	/**
+	 * Returns a new JobList, with all of the jobs sorted according to their due date and processing time
+	 * @return A new sorted JobList
+	 */
 	public JobList getSortedJobs(){
 		Collections.sort(jobs);
 		List<Job> jobsFinal = new ArrayList<Job>(jobs.size());
@@ -43,14 +47,10 @@ public class JobList {
 		return this.jobs.size();
 	}
 	
-	public float getLongestProcessingTime() {
-		float max = 0;
-		for (Job job : this.jobs) {
-			max = Math.max(max, job.getProcessingTime());
-		}
-		return max;
-	}
-	
+	/**
+	 * Find the job with the longest processing time
+	 * @return The job with the longest processing time
+	 */
 	public Job getLongestProcessingJob() {
 		float max = Integer.MIN_VALUE;
 		Job j = null;
@@ -65,18 +65,26 @@ public class JobList {
 		return j;
 	}
 	
-	public float getMaximumCompletionTime() {
-		return jobs.size()*this.getLongestProcessingTime();
-	}
-	
 	public float getTime() {
 		return this.time;
 	}
 	
+	/**
+	 * Sets the time from which this set of jobs has to find an optimal schedule 
+	 * @param time
+	 */
 	public void setTime(float time) {
 		this.time = time;
 	}
 	
+	/**
+	 * Get a subset from this set of jobs. Find all jobs with their index in [i,j] and a processing time smaller or equal to that
+	 * of jobK, but does not include jobK.
+	 * @param i The lower index
+	 * @param j The upper index
+	 * @param jobK The job for which we want to compare processing times
+	 * @return A new JobList containing the specified subset
+	 */
 	public JobList getSubset(int i, int j, Job jobK) {
 		List<Job> jobs = new ArrayList<Job>(Math.max(0, j-i+1));
 		for (Job job : this.jobs) {
@@ -89,6 +97,11 @@ public class JobList {
 		return new JobList(jobs, 0);
 	}
 	
+	/**
+	 * Get a subset of jobs for which their due time is smaller then or equal to dTime.
+	 * @param dTime The value to compare due time to
+	 * @return A new JobList with the specified set
+	 */
 	public JobList getSubsetDelta(float dTime) {
 		List<Job> jobs = new ArrayList<Job>();
 		Iterator<Job> itt = this.jobs.iterator();
@@ -99,6 +112,11 @@ public class JobList {
 		return new JobList(jobs, 0);
 	}
 	
+	/**
+	 * Get a subset of jobs for which their due time is greater then dTime.
+	 * @param dTime The value to compare due time to
+	 * @return A new JobList with the specified set
+	 */
 	public JobList getSubsetDeltaInverse(float dTime) {
 		List<Job> jobs = new ArrayList<Job>();
 		ListIterator<Job> itt = this.jobs.listIterator(this.jobs.size());
@@ -109,23 +127,16 @@ public class JobList {
 		return new JobList(jobs, 0);
 	}
 	
-	public int getCompletionTime() {
-		int sum = 0;
+	/**
+	 * Get the total processing time needed to complete all jobs in this set.
+	 * @return The total processing time
+	 */
+	public float getCompletionTime() {
+		float sum = 0;
 		for (Job job : this.jobs) {
 			sum += job.getProcessingTime();
 		}
 		return sum;
-	}
-	
-	public boolean sanityCheck() {
-		float due = 0;
-		for (Job job : this.jobs) {
-			if (job.getDueTime()< due)
-				return false;
-			else
-				due = job.getDueTime();
-		}
-		return true;
 	}
 	
 	@Override
