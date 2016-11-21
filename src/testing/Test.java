@@ -5,19 +5,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import algorithms.*;
+import algorithms.ApproxAlgorithm;
+import algorithms.ExactAlgorithm;
 import dataStructures.Job;
 import dataStructures.JobList;
-import sampleCode.*;
-
-import java.io.PrintWriter;
+import sampleCode.BestFirst;
+import sampleCode.ComputeTardiness;
+import sampleCode.Greedy;
+import sampleCode.ProblemInstance;
 
 public class Test {
 	
